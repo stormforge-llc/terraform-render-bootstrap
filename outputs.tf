@@ -14,6 +14,21 @@ output "kubeconfig-admin" {
   value     = local.kubeconfig-admin
   sensitive = true
 }
+output "kubeconfig-admin-ca-cert" {
+  value = base64encode(tls_self_signed_cert.kube-ca.cert_pem)
+}
+output "kubeconfig-admin-kubelet-cert" {
+  value = base64encode(tls_locally_signed_cert.admin.cert_pem)
+  sensitive = true
+}
+output "kubeconfig-admin-kubelet-key" {
+  value = base64encode(tls_private_key.admin.private_key_pem)
+  sensitive = true
+}
+output "kubeconfig-admin-server" {
+  value = format("https://%s:%s", var.api_servers[0], var.external_apiserver_port)
+}
+
 
 # assets to distribute to controllers
 # { some/path => content }
